@@ -12,3 +12,4 @@ C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_threa
 C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.csproj.GenerateResource.Cache
 C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.exe
 C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.pdb
+C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.csprojResolveAssemblyReference.cache

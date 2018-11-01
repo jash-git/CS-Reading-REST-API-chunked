@@ -15,15 +15,17 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
 {
     public partial class Form1 : Form
     {
-        public static string m_StrNewData;
-        public static string m_StrOldData;
-        public Thread m_Thread;
+        public static string []m_StrNewData;
+        public static string []m_StrOldData;
+        public Thread []m_Thread;
         public int m_intwaitcount;
         public static void Thread_fun(object arg)
         {
-            RESTfulAPI_getchunked("http://192.168.1.196:24410/syris/sydm/events?events_type=0");
+            String StrData = (String)arg;
+            string[] strs = StrData.Split(',');
+            RESTfulAPI_getchunked(strs[0], Convert.ToInt32(strs[1]));//RESTfulAPI_getchunked("http://192.168.1.196:24410/syris/sydm/events?events_type=0");
         }
-        public static void RESTfulAPI_getchunked(String url)
+        public static void RESTfulAPI_getchunked(String url,int index)
         {
             try
             {
@@ -62,7 +64,7 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
                     if (count != 0)
                     {
                         tmpString = Encoding.UTF8.GetString(buf, 0, count);
-                        m_StrNewData = tmpString;
+                        m_StrNewData[index] = tmpString;
                     }
                     Thread.Sleep(10);
                 } while (count >= 0);
@@ -82,26 +84,30 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            m_StrNewData = "wait...";
-            m_StrOldData = "";
+            m_StrNewData = new string[1];
+            m_StrOldData = new string[1];
+            m_StrNewData[0] = "wait...";
+            m_StrOldData[0] = "";
 
             timer1.Interval = 100;
             timer1.Enabled = true;
 
-            m_Thread = new Thread(Thread_fun);
-            m_Thread.IsBackground = true;
-            m_Thread.Start();
+            m_Thread = new Thread[1];
+            m_Thread[0] = new Thread(Thread_fun);
+            m_Thread[0].IsBackground = true;
+            String StrData=String.Format("{0},{1}","http://192.168.1.196:24410/syris/sydm/events?events_type=0",0);
+            m_Thread[0].Start(StrData);
 
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (m_Thread.IsAlive)
+            if (m_Thread[0].IsAlive)
             {
-                if (m_StrNewData != m_StrOldData)
+                if (m_StrNewData[0] != m_StrOldData[0])
                 {
-                    m_StrOldData = m_StrNewData;
-                    richTextBox1.AppendText(m_StrOldData);
+                    m_StrOldData[0] = m_StrNewData[0];
+                    richTextBox1.AppendText(m_StrOldData[0]);
                 }
                 m_intwaitcount = 0;
             }
@@ -110,10 +116,11 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
                 m_intwaitcount++;
                 if (m_intwaitcount == 600)
                 {
-                    m_Thread = null;
-                    m_Thread = new Thread(Thread_fun);
-                    m_Thread.IsBackground = true;
-                    m_Thread.Start();
+                    m_Thread[0] = null;
+                    m_Thread[0] = new Thread(Thread_fun);
+                    m_Thread[0].IsBackground = true;
+                    String StrData = String.Format("{0},{1}", "http://192.168.1.196:24410/syris/sydm/events?events_type=0", 0);
+                    m_Thread[0].Start(StrData);
                     richTextBox1.Text = "restart thread..." + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
                 }
                 else
@@ -125,10 +132,10 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (m_Thread.IsAlive)//關閉執行序
+            if (m_Thread[0].IsAlive)//關閉執行序
             {
                 timer1.Enabled = false;
-                m_Thread.Abort();
+                m_Thread[0].Abort();
             }
             
         }
