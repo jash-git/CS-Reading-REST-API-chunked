@@ -18,7 +18,7 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
         public static string m_StrNewData;
         public static string m_StrOldData;
         public Thread m_Thread;
-
+        public int m_intwaitcount;
         public static void Thread_fun(object arg)
         {
             RESTfulAPI_getchunked("http://192.168.1.196:24410/syris/sydm/events?events_type=0");
@@ -65,7 +65,7 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
                         m_StrNewData = tmpString;
                     }
                     Thread.Sleep(10);
-                } while (count > 0);
+                } while (count >= 0);
 
                 response.Close();
             }
@@ -89,16 +89,37 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
             timer1.Enabled = true;
 
             m_Thread = new Thread(Thread_fun);
+            m_Thread.IsBackground = true;
             m_Thread.Start();
 
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (m_StrNewData != m_StrOldData)
+            if (m_Thread.IsAlive)
             {
-                m_StrOldData = m_StrNewData;
-                richTextBox1.AppendText(m_StrOldData);
+                if (m_StrNewData != m_StrOldData)
+                {
+                    m_StrOldData = m_StrNewData;
+                    richTextBox1.AppendText(m_StrOldData);
+                }
+                m_intwaitcount = 0;
+            }
+            else
+            {
+                m_intwaitcount++;
+                if (m_intwaitcount == 600)
+                {
+                    m_Thread = null;
+                    m_Thread = new Thread(Thread_fun);
+                    m_Thread.IsBackground = true;
+                    m_Thread.Start();
+                    richTextBox1.Text = "restart thread..." + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                }
+                else
+                {
+                    richTextBox1.Text = "wait..." + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                }
             }
         }
 
@@ -109,6 +130,7 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
                 timer1.Enabled = false;
                 m_Thread.Abort();
             }
+            
         }
     }
 }

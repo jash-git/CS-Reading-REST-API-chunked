@@ -5,3 +5,10 @@ C:\Users\RD\Desktop\CS-HttpWebResponse_chunked_thread-Timer_show_data\CS-HttpWeb
 C:\Users\RD\Desktop\CS-HttpWebResponse_chunked_thread-Timer_show_data\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.csproj.GenerateResource.Cache
 C:\Users\RD\Desktop\CS-HttpWebResponse_chunked_thread-Timer_show_data\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.exe
 C:\Users\RD\Desktop\CS-HttpWebResponse_chunked_thread-Timer_show_data\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.pdb
+C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\bin\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.exe
+C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\bin\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.pdb
+C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS_HttpWebResponse_chunked_thread_Timer_show_data.Form1.resources
+C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS_HttpWebResponse_chunked_thread_Timer_show_data.Properties.Resources.resources
+C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.csproj.GenerateResource.Cache
+C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.exe
+C:\Users\RD\Desktop\CS-Reading-REST-API-chunked\CS-HttpWebResponse_chunked_thread-Timer_show_data\obj\x86\Release\CS-HttpWebResponse_chunked_thread-Timer_show_data.pdb
