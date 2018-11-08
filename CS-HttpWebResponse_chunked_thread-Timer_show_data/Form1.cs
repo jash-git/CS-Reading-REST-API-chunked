@@ -25,6 +25,89 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
             string[] strs = StrData.Split(',');
             RESTfulAPI_getchunked(strs[0], Convert.ToInt32(strs[1]));//RESTfulAPI_getchunked("http://192.168.1.196:24410/syris/sydm/events?events_type=0");
         }
+        public static void Thread_funPost(object arg)
+        {
+            String StrData = (String)arg;
+            string[] strs = StrData.Split('$');
+            RESTfulAPI_postchunked(strs[0], strs[1], Convert.ToInt32(strs[2]));
+        }
+        public static void RESTfulAPI_postchunked(String url, String data, int index)//新增專用POST模式下的chunked函數
+        {
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                //--
+                //定義此req的緩存策略
+                //https://msdn.microsoft.com/zh-tw/library/system.net.webrequest.cachepolicy(v=vs.110).aspx?cs-save-lang=1&cs-lang=csharp#code-snippet-1
+                HttpRequestCachePolicy noCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+                request.CachePolicy = noCachePolicy;
+                //--
+                request.Method = "POST";
+
+                //--
+                //request.ContentType = "application/x-www-form-urlencoded";//一般POST
+                request.ContentType = "application/json; charset=UTF-8";//POST to AJAX [is_ajax_request()]
+                //request.Accept = "application/json, text/javascript";//POST to AJAX [is_ajax_request()]
+                //request.UserAgent = "";//POST to AJAX [is_ajax_request()]
+                //request.Headers.Add("X-Requested-With", "XMLHttpRequest");//POST to AJAX [is_ajax_request()]
+                //--
+
+
+                //request.ContentLength = data1.Length;
+                //StreamWriter writer = new StreamWriter(request.GetRequestStream(), Encoding.ASCII);//CS2PHPrestfulapi 傳送全部改為UTF8
+                //writer.Write(data1);
+                //writer.Flush();
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                {
+                    streamWriter.Write(data);
+                    streamWriter.Flush();
+                }
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                string encoding = response.ContentEncoding;
+                if (encoding == null || encoding.Length < 1)
+                {
+                    encoding = "UTF-8"; //默认编码
+                }
+
+                //---
+                //add 2017/12/20
+                //Reading “chunked” response with HttpWebResponse - https://stackoverflow.com/questions/16998/reading-chunked-response-with-httpwebresponse
+                StringBuilder sb = new StringBuilder();
+                Byte[] buf = new byte[8192];
+                Stream resStream = response.GetResponseStream();
+                string tmpString = null;
+                int count = 0;
+                do
+                {
+                    count = resStream.Read(buf, 0, buf.Length);
+                    /*
+                    if (count != 0)
+                    {
+                        tmpString = Encoding.UTF8.GetString(buf, 0, count);
+                        m_StrChunkedNewData[index] = tmpString;
+                        if (m_StrChunkedNewData[index] != m_StrChunkedOldData[index])
+                        {
+                            m_StrChunkedOldData[index] = m_StrChunkedNewData[index];
+                        }
+                    }
+                    */
+                    if (count != 0)
+                    {
+                        tmpString = Encoding.UTF8.GetString(buf, 0, count);
+                        m_StrNewData[index] = tmpString;
+                    }
+
+                    Thread.Sleep(10);
+                } while (count >= 0);
+
+                response.Close();
+            }
+            catch
+            {
+
+            }
+        }
+
         public static void RESTfulAPI_getchunked(String url,int index)
         {
             try
@@ -93,10 +176,18 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
             timer1.Enabled = true;
 
             m_Thread = new Thread[1];
+            /*
             m_Thread[0] = new Thread(Thread_fun);
             m_Thread[0].IsBackground = true;
-            String StrData=String.Format("{0},{1}","http://192.168.1.196:24410/syris/sydm/events?events_type=0",0);
+            String StrData=String.Format("{0},{1}","http://192.168.1.196:24410/syris/sydm/events?events_type=4",0);
             m_Thread[0].Start(StrData);
+            //*/
+            //*
+            m_Thread[0] = new Thread(Thread_funPost);
+            m_Thread[0].IsBackground = true;
+            String StrData = String.Format("{0}${1}${2}", "http://192.168.1.196:24408/syris/sycg/remote/sydm", "{\"sydms\":[{\"identifier\": 1,\"command\": 401,\"query\":{\"events_type:\":4}}]}", 0);
+            m_Thread[0].Start(StrData);
+            //*/ 
 
         }
 
@@ -117,11 +208,19 @@ namespace CS_HttpWebResponse_chunked_thread_Timer_show_data
                 if (m_intwaitcount == 600)
                 {
                     m_Thread[0] = null;
+                    /*
                     m_Thread[0] = new Thread(Thread_fun);
                     m_Thread[0].IsBackground = true;
-                    String StrData = String.Format("{0},{1}", "http://192.168.1.196:24410/syris/sydm/events?events_type=0", 0);
+                    String StrData=String.Format("{0},{1}","http://192.168.1.196:24410/syris/sydm/events?events_type=4",0);
+                    m_Thread[0].Start(StrData);
+                    //*/
+                    //*
+                    m_Thread[0] = new Thread(Thread_funPost);
+                    m_Thread[0].IsBackground = true;
+                    String StrData = String.Format("{0}${1}${2}", "http://192.168.1.196:24408/syris/sycg/remote/sydm", "{\"sydms\":[{\"identifier\": 1,\"command\": 401,\"query\":{\"events_type:\":4}}]}", 0);
                     m_Thread[0].Start(StrData);
                     richTextBox1.Text = "restart thread..." + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+                    //*/ 
                 }
                 else
                 {
